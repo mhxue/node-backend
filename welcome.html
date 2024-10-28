@@ -15,12 +15,22 @@
 			<p>
 				<pre id="get-version"></pre>
 			</p>
+			<button onclick="updateDescription()">Update description</button>
+			<p>
+				<label for="fname">New description:</label>
+				<input type="text" id="new_des" name="new_des">
+			</p>
+			<p>
+				<pre id="update-result"></pre>
+			</p>
 			<script>
+				const HOST = 'https://blog-vercel-azure.vercel.app'
+				// const HOST = 'http://localhost:3000'
 				function getGreeting() {
-					fetchAndUpdate('https://blog-vercel-azure.vercel.app/api/greeting', 'greeting')
+					fetchAndUpdate(`${HOST}/api/greeting`, 'greeting')
 				}
 				function getVersionAndDes() {
-					fetchAndUpdate('https://blog-vercel-azure.vercel.app/api/version', 'get-version')
+					fetchAndUpdate(`${HOST}/api/version`, 'get-version')
 				}
 				function fetchAndUpdate(url, id) {
 					const Http = new XMLHttpRequest();
@@ -30,7 +40,20 @@
 					Http.onreadystatechange = (e) => {
 						const obj = JSON.parse(Http.responseText);
 						document.getElementById(id).innerText = JSON.stringify(obj, null, 4)
+						document.getElementById("update-result").innerText = ''
 					}
+				}
+				function updateDescription() {
+					const new_des = document.getElementById('new_des').value
+					console.log(new_des)
+					const Http = new XMLHttpRequest();
+					Http.open("POST", `${HOST}/api/version`);
+					Http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+					Http.send(`description=${new_des}`);
+
+					Http.onreadystatechange = (e) => {
+						document.getElementById("update-result").innerText = JSON.stringify(JSON.parse(Http.responseText), null, 4)
+					}	
 				}
 			</script>
 	</body>
