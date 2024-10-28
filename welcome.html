@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Welcome</title>
+	</head>
+	<body>
+			<h1>Welcome</h1>
+			<button onclick="getGreeting()">Get greeting</button>
+			<p>
+				<pre id="greeting"></pre>
+			</p>
+			<button onclick="getVersionAndDes()">Get version</button>
+			<p>
+				<pre id="get-version"></pre>
+			</p>
+			<script>
+				function getGreeting() {
+					fetchAndUpdate('https://blog-vercel-azure.vercel.app/api/greeting', 'greeting')
+				}
+				function getVersionAndDes() {
+					fetchAndUpdate('https://blog-vercel-azure.vercel.app/api/version', 'get-version')
+				}
+				function fetchAndUpdate(url, id) {
+					const Http = new XMLHttpRequest();
+					Http.open("GET", url);
+					Http.send();
+			
+					Http.onreadystatechange = (e) => {
+						const obj = JSON.parse(Http.responseText);
+						document.getElementById(id).innerText = JSON.stringify(obj, null, 4)
+					}
+				}
+			</script>
+	</body>
+	
+</html>
